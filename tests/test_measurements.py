@@ -61,3 +61,8 @@ def test_missing_crs_and_outside_utm_region_fail_clearly():
         determine_utm_crs(20, 85)
 
 
+def test_empty_dataset_needs_no_measurement_crs():
+    frame = gpd.GeoDataFrame(geometry=[None], crs="EPSG:4326")
+    assert determine_measurement_crs(frame, CRS.from_epsg(4326)) is None
+
+
