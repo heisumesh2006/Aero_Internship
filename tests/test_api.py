@@ -44,3 +44,9 @@ def test_shapefile_zip_upload(client, shapefile_zip):
     assert item["measurement"]["status"] == "SUPPORTED"
 
 
+def test_missing_file(client):
+    response = client.get("/api/files/00000000-0000-0000-0000-000000000000/")
+    assert response.status_code == 404
+    assert response.json()["error"]["code"] == "FILE_NOT_FOUND"
+
+
