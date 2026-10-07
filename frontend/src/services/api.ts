@@ -42,3 +42,15 @@ export function listFiles(limit = 20, offset = 0, signal?: AbortSignal): Promise
   return request(`/api/files/?limit=${limit}&offset=${offset}`, { signal })
 }
 
+export async function getAllFiles(signal?: AbortSignal): Promise<UploadedFile[]> {
+  const files: UploadedFile[] = []
+  let offset = 0
+  const limit = 100
+  while (true) {
+    const page = await listFiles(limit, offset, signal)
+    files.push(...page.items)
+    offset += page.items.length
+    if (!page.items.length || offset >= page.total) return files
+  }
+}
+
