@@ -26,3 +26,26 @@ def _get_file(session: Session, file_id: str) -> UploadedFile:
     return record
 
 
+@router.post(
+    "/", status_code=201, response_model=FileResponse,
+    summary="Upload and process a KML or zipped shapefile",
+    description="Validates and stores an upload, extracts its features, selects a metric CRS, and calculates measurements synchronously.",
+    responses={400: {"description": "Invalid geospatial file"}, 413: {"description": "Upload too large"}, 415: {"description": "Unsupported extension"}},
+)
+async def upload_file(request: Request, file: UploadFile = File(...), session: Session = Depends(get_session)) -> FileResponse:
+    file_type = file_type_for(file.filename)
+    settings = request.app.state.settings
+    logger.info("Upload started: type=%s", file_type)
+    path, _size = await save_upload(file, settings.upload_dir, settings.max_upload_bytes)
+    record = UploadedFile(original_filename=PureWindowsPath(file.filename or "upload").name[:255], stored_filename=path.name, file_type=file_type, status=FileStatus.PROCESSING)
+    session.add(record)
+    session.commit()
+    try:
+        process_file(session, record, path)
+    except AppError:
+        raise
+    except Exception as exc:
+        raise AppError("PROCESSING_FAILED", "Could not process the uploaded file.", 500) from exc
+    return FileResponse.from_record(record)
+
+
