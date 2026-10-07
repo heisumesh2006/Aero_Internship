@@ -49,3 +49,14 @@ async def upload_file(request: Request, file: UploadFile = File(...), session: S
     return FileResponse.from_record(record)
 
 
+@router.get("/", response_model=FileListResponse, summary="List uploaded files")
+def list_files(
+    limit: int = Query(20, ge=1, le=100),
+    offset: int = Query(0, ge=0),
+    session: Session = Depends(get_session),
+) -> FileListResponse:
+    total = session.scalar(select(func.count()).select_from(UploadedFile)) or 0
+    records = session.scalars(select(UploadedFile).order_by(UploadedFile.created_at.desc(), UploadedFile.id.desc()).limit(limit).offset(offset)).all()
+    return FileListResponse(total=total, limit=limit, offset=offset, items=[FileResponse.from_record(record) for record in records])
+
+
