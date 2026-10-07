@@ -81,3 +81,9 @@ def test_windows_device_names_rejected(client, tmp_path, name):
     assert response.json()["error"]["code"] == "UNSAFE_ARCHIVE"
 
 
+def test_archive_member_limit(client, tmp_path):
+    response = upload(client, "demo.zip", make_zip(tmp_path, {f"entry-{i}.txt": b"x" for i in range(201)}))
+    assert response.status_code == 400
+    assert "too many entries" in response.json()["error"]["message"]
+
+
