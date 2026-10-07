@@ -44,3 +44,9 @@ export function Skeleton({ className = '' }: { className?: string }) {
   return <div className={`animate-pulse rounded-xl bg-white/[0.065] ${className}`} aria-hidden="true" />
 }
 
+export function SectionHeading({ eyebrow, title, aside }: { eyebrow?: string; title: string; aside?: ReactNode }) {
+  return <div className="mb-5 flex flex-wrap items-end justify-between gap-3">
+    <div>{eyebrow && <p className="eyebrow mb-2">{eyebrow}</p>}<h2 className="text-xl font-semibold tracking-tight text-white">{title}</h2></div>
+    {aside}
+  </div>
+}
