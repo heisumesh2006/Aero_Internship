@@ -2,6 +2,7 @@ import logging
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI, Request
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
 from app.api.routes.files import router as files_router
@@ -33,6 +34,12 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     )
     application.state.settings = settings
     application.state.session_factory = make_session_factory(engine)
+    application.add_middleware(
+        CORSMiddleware,
+        allow_origins=["http://localhost:5173", "http://127.0.0.1:5173"],
+        allow_methods=["GET", "POST"],
+        allow_headers=["Content-Type"],
+    )
     application.add_exception_handler(AppError, app_error_handler)
 
     @application.exception_handler(Exception)
