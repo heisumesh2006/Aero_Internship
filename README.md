@@ -136,3 +136,7 @@ The image uses Python 3.12 and runs as a non-root user. A named volume preserves
 
 Only `.kml` and `.zip` extensions are accepted; upload bytes are capped. Client filenames never determine storage paths. ZIP entries are checked for absolute or parent paths, Windows path forms and reserved device names, symlinks, duplicates, entry count, expanded size, and extreme compression ratio. Exactly one shapefile and its mandatory companion files are required. Extracted data lives in a unique temporary directory. Malformed spatial input receives a structured error without a traceback in the API response.
 
+## Limitations
+
+One shapefile dataset is accepted per ZIP. Processing is synchronous and SQLite targets local or small deployments. A single dataset-center UTM zone can distort very large or cross-zone datasets; dateline and polar datasets need a different strategy. Uploaded originals remain on local disk for audit/reprocessing and there is no retention policy, authentication, or cloud object storage.
+
