@@ -60,3 +60,17 @@ def test_paginated_file_list(client, kml_bytes):
     assert client.get("/api/files/?limit=101").status_code == 422
 
 
+def test_unsupported_and_null_features_do_not_stop_dataset(client, monkeypatch):
+    import app.services.file_service as service
+
+    frame = gpd.GeoDataFrame(
+        {"name": ["collection", "missing", "point"]},
+        geometry=[GeometryCollection([Point(77.6, 13)]), None, Point(77.6, 13)],
+        crs="EPSG:4326",
+    )
+    monkeypatch.setattr(service, "read_dataset", lambda *_: frame)
+    response = upload(client, "demo.kml", b"test")
+    assert response.status_code == 201, response.text
+    items = client.get(f"/api/files/{response.json()['id']}/measurements/").json()["features"]
+    assert [item["measurement"]["status"] for item in items] == ["UNSUPPORTED", "INVALID_GEOMETRY", "NOT_REQUIRED"]
+    assert items[1]["geometry"] is None
