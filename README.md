@@ -72,6 +72,18 @@ uvicorn app.main:app --reload
 
 Tables and `uploads/` are initialized at startup. Open [Swagger UI](http://127.0.0.1:8000/docs) or [ReDoc](http://127.0.0.1:8000/redoc).
 
+## Frontend Demo
+
+An optional React + TypeScript dashboard provides KML and zipped Shapefile upload, a paginated dataset library, feature measurements, and an interactive Leaflet map. Run the FastAPI backend first, then in a second terminal:
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+Open [the frontend](http://localhost:5173). It calls the backend at `http://127.0.0.1:8000` by default. Copy `frontend/.env.example` to `frontend/.env` to set a different `VITE_API_BASE_URL`. The backend permits the local Vite origin for development. See [frontend/README.md](frontend/README.md) for the page structure and build command.
+
 ## API endpoints
 
 | Method | Path | Purpose |
