@@ -33,3 +33,10 @@ export function EmptyState({ title, description, action, href }: { title: string
   </div>
 }
 
+export function LoadingState({ label = 'Loading geospatial data' }: { label?: string }) {
+  return <div className="panel flex min-h-[260px] flex-col items-center justify-center gap-4" role="status">
+    <LoaderCircle className="h-7 w-7 animate-spin text-emerald-300" />
+    <span className="text-sm text-slate-400">{label}</span>
+  </div>
+}
+
