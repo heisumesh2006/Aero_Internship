@@ -20,3 +20,7 @@ def crs_label(crs: CRS) -> str:
     return crs.to_authority() and ":".join(crs.to_authority()) or crs.to_string()
 
 
+def is_geographic_crs(crs: CRS) -> bool:
+    return crs.is_geographic
+
+
