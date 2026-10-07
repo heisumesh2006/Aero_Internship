@@ -40,3 +40,7 @@ export function LoadingState({ label = 'Loading geospatial data' }: { label?: st
   </div>
 }
 
+export function Skeleton({ className = '' }: { className?: string }) {
+  return <div className={`animate-pulse rounded-xl bg-white/[0.065] ${className}`} aria-hidden="true" />
+}
+
