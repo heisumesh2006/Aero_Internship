@@ -16,3 +16,11 @@ export function StatusBadge({ status }: { status: FileStatus | MeasurementStatus
   </span>
 }
 
+export function ErrorPanel({ message, onRetry }: { message: string; onRetry?: () => void }) {
+  return <div role="alert" className="flex items-start gap-3 rounded-2xl border border-rose-400/25 bg-rose-400/[0.08] px-5 py-4 text-rose-100">
+    <AlertCircle className="mt-0.5 h-5 w-5 shrink-0 text-rose-300" />
+    <div className="min-w-0 flex-1"><p className="font-semibold">Something went wrong</p><p className="mt-1 text-sm leading-6 text-rose-100/75">{message}</p></div>
+    {onRetry && <button onClick={onRetry} className="rounded-lg px-3 py-1.5 text-sm font-semibold text-rose-200 hover:bg-rose-300/10">Retry</button>}
+  </div>
+}
+
