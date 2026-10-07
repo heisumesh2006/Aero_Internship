@@ -33,3 +33,8 @@ class FileResponse(BaseModel):
         )
 
 
+class FileListResponse(BaseModel):
+    total: int
+    limit: int
+    offset: int
+    items: list[FileResponse]
