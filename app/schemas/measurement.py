@@ -22,3 +22,10 @@ class FeatureResponse(BaseModel):
     measurement: MeasurementResponse
 
 
+class FileMeasurementsResponse(BaseModel):
+    file_id: str
+    filename: str
+    source_crs: str | None
+    measurement_crs: str | None
+    feature_count: int
+    features: list[FeatureResponse]
