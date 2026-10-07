@@ -56,3 +56,11 @@ def test_missing_companions(client, tmp_path):
     assert "missing .shx" in response.json()["error"]["message"]
 
 
+@pytest.mark.parametrize("name", ["../escape.shp", "/absolute.shp", "C:\\escape.shp"])
+def test_zip_traversal_rejected(client, tmp_path, name):
+    response = upload(client, "demo.zip", make_zip(tmp_path, {name: b"content"}))
+    assert response.status_code == 400
+    assert response.json()["error"]["code"] == "UNSAFE_ARCHIVE"
+    assert not (tmp_path / "escape.shp").exists()
+
+
