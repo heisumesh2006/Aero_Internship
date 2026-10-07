@@ -65,3 +65,30 @@ def get_file(file_id: str, session: Session = Depends(get_session)) -> FileRespo
     return FileResponse.from_record(_get_file(session, file_id))
 
 
+@router.get("/{file_id}/measurements/", response_model=FileMeasurementsResponse, summary="Get feature geometries and measurements", responses={404: {"description": "File not found"}})
+def get_measurements(file_id: str, session: Session = Depends(get_session)) -> FileMeasurementsResponse:
+    record = _get_file(session, file_id)
+    features = session.scalars(select(Feature).where(Feature.uploaded_file_id == file_id).order_by(Feature.feature_index)).all()
+    return FileMeasurementsResponse(
+        file_id=record.id,
+        filename=record.original_filename,
+        source_crs=record.source_crs,
+        measurement_crs=record.measurement_crs,
+        feature_count=record.feature_count,
+        features=[FeatureResponse(
+            feature_index=feature.feature_index,
+            external_feature_id=feature.external_feature_id,
+            geometry_type=feature.geometry_type,
+            geometry=feature.geometry_geojson,
+            properties=feature.properties_json,
+            source_crs=feature.source_crs,
+            measurement_crs=feature.measurement_crs,
+            measurement=MeasurementResponse(
+                type=feature.measurement_type,
+                value=float(feature.measurement_value) if feature.measurement_value is not None else None,
+                unit=feature.measurement_unit,
+                status=feature.measurement_status,
+                message=feature.measurement_message,
+            ),
+        ) for feature in features],
+    )
