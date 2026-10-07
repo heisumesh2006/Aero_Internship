@@ -28,3 +28,11 @@ export interface FileListResponse {
   items: UploadedFile[]
 }
 
+export interface MeasurementResponse {
+  type: 'area' | 'length' | null
+  value: number | null
+  unit: string | null
+  status: MeasurementStatus
+  message: string | null
+}
+
