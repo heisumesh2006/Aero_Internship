@@ -31,3 +31,11 @@ def test_extension_and_empty_upload(client):
     assert response.json()["error"]["code"] == "EMPTY_FILE"
 
 
+def test_size_limit(tmp_path, kml_bytes):
+    settings = Settings(database_url=f"sqlite:///{(tmp_path / 'test.db').as_posix()}", upload_dir=tmp_path / "uploads", max_upload_size_mb=0)
+    with TestClient(create_app(settings)) as client:
+        response = upload(client, "demo.kml", kml_bytes)
+    assert response.status_code == 413
+    assert not list((tmp_path / "uploads").iterdir())
+
+
