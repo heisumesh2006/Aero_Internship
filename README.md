@@ -106,3 +106,12 @@ An upload returns HTTP 201:
 
 `GET /api/files/{id}/measurements/` returns `file_id`, `filename`, both CRSs, `feature_count`, and a `features` array. Each feature contains `feature_index`, `external_feature_id`, `geometry_type`, source-coordinate GeoJSON `geometry`, `properties`, both CRSs, and a measurement object such as `{"type":"area","value":12034.567,"unit":"m²","status":"SUPPORTED","message":null}`. Point features return `NOT_REQUIRED`; null/empty/invalid geometries return `INVALID_GEOMETRY`; GeometryCollection returns `UNSUPPORTED`. Errors use `{"error":{"code":"...","message":"..."}}` with 400, 404, 413, or 415 as appropriate.
 
+## Running tests
+
+```bash
+pytest
+pytest --cov=app --cov-report=term-missing
+```
+
+Tests generate shapefiles in temporary directories and use separate SQLite databases and upload folders.
+
