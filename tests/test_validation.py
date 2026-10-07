@@ -64,3 +64,13 @@ def test_zip_traversal_rejected(client, tmp_path, name):
     assert not (tmp_path / "escape.shp").exists()
 
 
+def test_backslash_archive_path_rejected(tmp_path):
+    from types import SimpleNamespace
+    from app.core.exceptions import AppError
+    from app.utils.safe_zip import _safe_destination
+
+    member = SimpleNamespace(filename="folder\\escape.shp", external_attr=0)
+    with pytest.raises(AppError, match="unsafe path"):
+        _safe_destination(tmp_path, member)
+
+
