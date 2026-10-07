@@ -22,3 +22,12 @@ def make_zip(tmp_path: Path, names: dict[str, bytes]) -> bytes:
     return path.read_bytes()
 
 
+def test_extension_and_empty_upload(client):
+    response = upload(client, "demo.json", b"{}")
+    assert response.status_code == 415
+    assert response.json()["error"]["code"] == "UNSUPPORTED_FILE_TYPE"
+    response = upload(client, "demo.kml", b"")
+    assert response.status_code == 400
+    assert response.json()["error"]["code"] == "EMPTY_FILE"
+
+
