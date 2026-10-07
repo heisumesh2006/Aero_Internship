@@ -18,3 +18,8 @@ def client(tmp_path: Path):
         yield test_client
 
 
+@pytest.fixture
+def kml_bytes() -> bytes:
+    return KML.encode("utf-8")
+
+
