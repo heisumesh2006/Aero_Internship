@@ -23,3 +23,6 @@ button:disabled { cursor: not-allowed; }
   .field { @apply w-full rounded-xl border border-white/[0.11] bg-[#091724] px-4 py-3 text-sm text-white outline-none transition placeholder:text-slate-600 focus:border-emerald-300/50 focus:ring-2 focus:ring-emerald-300/10; }
 }
 
+.mono { font-family: 'DM Mono', ui-monospace, SFMono-Regular, Consolas, monospace; }
+.soft-grid { background-image: linear-gradient(rgba(124, 183, 193, .045) 1px, transparent 1px), linear-gradient(90deg, rgba(124, 183, 193, .045) 1px, transparent 1px); background-size: 28px 28px; }
+.hero-glow { background: radial-gradient(circle at 78% 48%, rgba(60, 180, 153, .20), transparent 35%), radial-gradient(circle at 0% 100%, rgba(48, 102, 163, .11), transparent 48%); }
