@@ -11,3 +11,14 @@ class MeasurementResponse(BaseModel):
     message: str | None
 
 
+class FeatureResponse(BaseModel):
+    feature_index: int
+    external_feature_id: str | None
+    geometry_type: str | None
+    geometry: dict[str, Any] | None
+    properties: dict[str, Any]
+    source_crs: str
+    measurement_crs: str | None
+    measurement: MeasurementResponse
+
+
