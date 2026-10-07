@@ -34,3 +34,12 @@ def test_degrees_are_reprojected():
     assert 1000 < result.value < 1200
 
 
+def test_unmeasured_and_invalid_geometries():
+    crs = CRS.from_epsg(32643)
+    assert measure_geometry(Point(0, 0), crs, crs).status == MeasurementStatus.NOT_REQUIRED
+    assert measure_geometry(MultiPoint([(0, 0), (1, 1)]), crs, crs).status == MeasurementStatus.NOT_REQUIRED
+    assert measure_geometry(GeometryCollection([Point(0, 0)]), crs, crs).status == MeasurementStatus.UNSUPPORTED
+    assert measure_geometry(None, crs, crs).status == MeasurementStatus.INVALID_GEOMETRY
+    assert measure_geometry(Polygon(), crs, crs).status == MeasurementStatus.INVALID_GEOMETRY
+
+
