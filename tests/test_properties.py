@@ -12,3 +12,6 @@ def test_properties_are_strict_json_values():
     assert json_safe(value) == {"number": 4, "missing": None, "nullable": None, "date": "2026-01-02T00:00:00", "items": [1.5, None]}
 
 
+def test_geometry_collection_serializes():
+    assert geometry_geojson(GeometryCollection([Point(1, 2)]))["type"] == "GeometryCollection"
+    assert geometry_geojson(None) is None
