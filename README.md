@@ -115,3 +115,11 @@ pytest --cov=app --cov-report=term-missing
 
 Tests generate shapefiles in temporary directories and use separate SQLite databases and upload folders.
 
+## Docker
+
+```bash
+docker compose up --build
+```
+
+The image uses Python 3.12 and runs as a non-root user. A named volume preserves SQLite and uploads at `/data`; the API is on port 8000. The local venv, DB, uploads, caches, and secrets are excluded from the build context.
+
