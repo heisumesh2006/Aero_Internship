@@ -60,3 +60,8 @@ def list_files(
     return FileListResponse(total=total, limit=limit, offset=offset, items=[FileResponse.from_record(record) for record in records])
 
 
+@router.get("/{file_id}/", response_model=FileResponse, summary="Get uploaded file metadata", responses={404: {"description": "File not found"}})
+def get_file(file_id: str, session: Session = Depends(get_session)) -> FileResponse:
+    return FileResponse.from_record(_get_file(session, file_id))
+
+
