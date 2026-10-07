@@ -66,3 +66,6 @@ def test_empty_dataset_needs_no_measurement_crs():
     assert determine_measurement_crs(frame, CRS.from_epsg(4326)) is None
 
 
+def test_self_intersecting_polygon_is_invalid():
+    bowtie = Polygon([(0, 0), (2, 2), (0, 2), (2, 0)])
+    assert measure_geometry(bowtie, CRS.from_epsg(32643), CRS.from_epsg(32643)).status == MeasurementStatus.INVALID_GEOMETRY
