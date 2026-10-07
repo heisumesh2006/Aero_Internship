@@ -54,3 +54,10 @@ def test_non_metric_projected_crs_selects_utm():
     assert determine_measurement_crs(frame, CRS.from_epsg(2263)).to_epsg() == 32618
 
 
+def test_missing_crs_and_outside_utm_region_fail_clearly():
+    with pytest.raises(AppError, match="missing or invalid"):
+        normalize_crs(None)
+    with pytest.raises(AppError, match="between 80°S and 84°N"):
+        determine_utm_crs(20, 85)
+
+
