@@ -36,3 +36,9 @@ Client -> FastAPI routes -> upload validation -> KML / safe ZIP + shapefile read
 6. Choose a metric measurement CRS, then measure each supported feature after transformation. The stored GeoJSON stays in source coordinates.
 7. Store feature metadata and mark the file `COMPLETED`. A file-level error marks it `FAILED` with a safe message. Temporary extraction files are removed.
 
+## CRS handling
+
+EPSG:4326 coordinates are longitude and latitude in degrees. A degree is an angular unit, so planar area or length on those raw coordinates is not a square-meter or meter measurement. For geographic and non-metric projected inputs, the service transforms the dataset to WGS84, finds the center of its bounds, selects the corresponding UTM zone, then transforms each geometry into that UTM CRS for measurement. Northern zones use EPSG:32601–32660; southern zones use EPSG:32701–32760. Already projected CRSs with meter axes are used directly.
+
+For a Bengaluru feature around 77.6°E, 13°N, this selects UTM zone 43N (`EPSG:32643`). Its source geometry remains in EPSG:4326 while length is reported in meters and area in m². A single UTM zone is pragmatic for local and regional datasets; global, dateline-crossing, polar, or many-zone datasets need a geodesic or tailored projection strategy. Dataset centers outside UTM latitude limits are rejected for non-metric input.
+
