@@ -34,3 +34,11 @@ export function crsDescription(crs: string | null): string {
   return 'Projected coordinate system'
 }
 
+export function featureCounts(features: FeatureMeasurement[]) {
+  return {
+    measurable: features.filter(item => item.measurement.status === 'SUPPORTED').length,
+    polygons: features.filter(item => geometryFamily(item.geometry_type) === 'Polygon').length,
+    lines: features.filter(item => geometryFamily(item.geometry_type) === 'Line').length,
+    points: features.filter(item => geometryFamily(item.geometry_type) === 'Point').length,
+  }
+}
