@@ -64,3 +64,6 @@ export function getFile(id: string, signal?: AbortSignal): Promise<UploadedFile>
   return request(`/api/files/${encodeURIComponent(id)}/`, { signal })
 }
 
+export function getMeasurements(id: string, signal?: AbortSignal): Promise<FileMeasurementsResponse> {
+  return request(`/api/files/${encodeURIComponent(id)}/measurements/`, { signal })
+}
