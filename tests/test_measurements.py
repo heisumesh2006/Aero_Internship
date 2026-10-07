@@ -27,3 +27,10 @@ def test_projected_measurements_and_multigeometries():
     assert measure_geometry(MultiLineString([line, line]), crs, crs).value == 10
 
 
+def test_degrees_are_reprojected():
+    line = LineString([(77.59, 12.97), (77.60, 12.97)])
+    result = measure_geometry(line, CRS.from_epsg(4326), CRS.from_epsg(32643))
+    assert result.status == MeasurementStatus.SUPPORTED
+    assert 1000 < result.value < 1200
+
+
