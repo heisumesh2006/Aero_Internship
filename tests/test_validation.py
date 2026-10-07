@@ -50,3 +50,9 @@ def test_corrupt_or_missing_shapefile(client, tmp_path, content, code):
     assert response.json()["error"]["code"] == code
 
 
+def test_missing_companions(client, tmp_path):
+    response = upload(client, "demo.zip", make_zip(tmp_path, {"parcel.shp": b"content"}))
+    assert response.status_code == 400
+    assert "missing .shx" in response.json()["error"]["message"]
+
+
