@@ -9,3 +9,28 @@ export class ApiRequestError extends Error {
   }
 }
 
+async function request<T>(path: string, options?: RequestInit): Promise<T> {
+  let response: Response
+  try {
+    response = await fetch(`${API_BASE_URL}${path}`, options)
+  } catch {
+    throw new ApiRequestError('Cannot reach the API. Check that the FastAPI server is running.', 0, 'NETWORK_ERROR')
+  }
+  if (!response.ok) {
+    let body: ApiErrorBody = {}
+    try { body = await response.json() as ApiErrorBody } catch { /* HTTP status still provides an error. */ }
+    const code = body.error?.code || 'REQUEST_FAILED'
+    const messages: Record<string, string> = {
+      UNSUPPORTED_FILE_TYPE: 'Unsupported file type. Upload a .kml file or a zipped Shapefile.',
+      INVALID_SHAPEFILE_ARCHIVE: body.error?.message?.includes('missing')
+        ? 'The archive is missing required Shapefile components.'
+        : 'The ZIP must contain exactly one valid Shapefile dataset.',
+      FILE_TOO_LARGE: 'The uploaded file exceeds the maximum allowed size.',
+      FILE_NOT_FOUND: 'This dataset could not be found.',
+      MISSING_CRS: 'The Shapefile needs a valid .prj file describing its coordinate system.',
+    }
+    throw new ApiRequestError(messages[code] || body.error?.message || `Request failed (${response.status}).`, response.status, code)
+  }
+  return response.json() as Promise<T>
+}
+
