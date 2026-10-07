@@ -17,3 +17,13 @@ def test_utm_zones_and_hemispheres():
     assert determine_utm_crs(-180, 0).to_epsg() == 32601
 
 
+def test_projected_measurements_and_multigeometries():
+    crs = CRS.from_epsg(32643)
+    square = Polygon([(0, 0), (10, 0), (10, 10), (0, 10)])
+    line = LineString([(0, 0), (3, 4)])
+    assert measure_geometry(square, crs, crs).value == 100
+    assert measure_geometry(MultiPolygon([square, Polygon([(20, 0), (30, 0), (30, 10), (20, 10)])]), crs, crs).value == 200
+    assert measure_geometry(line, crs, crs).value == 5
+    assert measure_geometry(MultiLineString([line, line]), crs, crs).value == 10
+
+
