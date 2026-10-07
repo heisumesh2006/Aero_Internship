@@ -16,3 +16,7 @@ def normalize_crs(value: object) -> CRS:
         raise AppError("INVALID_CRS", "Dataset CRS is missing or invalid.") from exc
 
 
+def crs_label(crs: CRS) -> str:
+    return crs.to_authority() and ":".join(crs.to_authority()) or crs.to_string()
+
+
