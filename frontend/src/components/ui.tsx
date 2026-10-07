@@ -24,3 +24,12 @@ export function ErrorPanel({ message, onRetry }: { message: string; onRetry?: ()
   </div>
 }
 
+export function EmptyState({ title, description, action, href }: { title: string; description: string; action?: string; href?: string }) {
+  return <div className="panel flex min-h-[240px] flex-col items-center justify-center px-6 py-12 text-center">
+    <span className="mb-5 grid h-14 w-14 place-items-center rounded-2xl border border-emerald-300/15 bg-emerald-300/[0.07] text-emerald-300"><DatabaseZap size={24} /></span>
+    <h3 className="text-lg font-semibold text-white">{title}</h3>
+    <p className="mt-2 max-w-md text-sm leading-6 text-slate-400">{description}</p>
+    {action && href && <Link className="btn-primary mt-6" to={href}>{action}<ArrowRight size={16} /></Link>}
+  </div>
+}
+
