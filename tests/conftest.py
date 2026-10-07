@@ -23,3 +23,16 @@ def kml_bytes() -> bytes:
     return KML.encode("utf-8")
 
 
+@pytest.fixture
+def shapefile_zip(tmp_path: Path) -> bytes:
+    polygon = Polygon([(77.59, 12.97), (77.60, 12.97), (77.60, 12.98), (77.59, 12.98)])
+    frame = gpd.GeoDataFrame({"name": ["parcel"]}, geometry=[polygon], crs="EPSG:4326")
+    directory = tmp_path / "source"
+    directory.mkdir()
+    shp = directory / "parcel.shp"
+    frame.to_file(shp, engine="pyogrio")
+    archive_path = tmp_path / "data.zip"
+    with ZipFile(archive_path, "w") as archive:
+        for companion in directory.iterdir():
+            archive.write(companion, companion.name)
+    return archive_path.read_bytes()
