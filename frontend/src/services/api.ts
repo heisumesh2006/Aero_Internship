@@ -38,3 +38,7 @@ export function getHealth(signal?: AbortSignal): Promise<{ status: string }> {
   return request('/health', { signal })
 }
 
+export function listFiles(limit = 20, offset = 0, signal?: AbortSignal): Promise<FileListResponse> {
+  return request(`/api/files/?limit=${limit}&offset=${offset}`, { signal })
+}
+
