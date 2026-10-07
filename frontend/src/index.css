@@ -1,0 +1,25 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap');
+@import 'tailwindcss';
+
+:root { color-scheme: dark; font-family: 'Manrope', Inter, system-ui, sans-serif; background: #07131f; }
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { margin: 0; min-width: 320px; }
+button, input, select { font: inherit; }
+button { cursor: pointer; }
+button:disabled { cursor: not-allowed; }
+:focus-visible { outline: 2px solid #8ce5c1; outline-offset: 3px; }
+::selection { background: rgba(108, 226, 181, .28); color: white; }
+::-webkit-scrollbar { width: 9px; height: 9px; }
+::-webkit-scrollbar-track { background: #0a1725; }
+::-webkit-scrollbar-thumb { background: #304254; border-radius: 20px; }
+
+@layer components {
+  .panel { @apply rounded-[22px] border border-white/[0.085] bg-[#101f2d]/90 shadow-[0_18px_50px_rgba(1,9,18,.17)]; }
+  .panel-hover { @apply transition-all duration-200 hover:-translate-y-0.5 hover:border-emerald-300/25 hover:shadow-[0_22px_60px_rgba(1,9,18,.28)]; }
+  .eyebrow { @apply text-[10px] font-extrabold uppercase tracking-[0.23em] text-emerald-300; }
+  .btn-primary { @apply inline-flex items-center justify-center gap-2 rounded-xl border border-emerald-200/20 bg-emerald-300 px-5 py-3 text-sm font-extrabold text-[#09211f] shadow-[0_8px_24px_rgba(82,211,170,.15)] transition hover:-translate-y-0.5 hover:bg-emerald-200 hover:shadow-[0_12px_30px_rgba(82,211,170,.25)] disabled:opacity-50; }
+  .btn-muted { @apply inline-flex items-center justify-center gap-2 rounded-xl border border-white/[0.12] bg-white/[0.05] px-5 py-3 text-sm font-bold text-slate-200 transition hover:border-white/25 hover:bg-white/[0.085]; }
+  .field { @apply w-full rounded-xl border border-white/[0.11] bg-[#091724] px-4 py-3 text-sm text-white outline-none transition placeholder:text-slate-600 focus:border-emerald-300/50 focus:ring-2 focus:ring-emerald-300/10; }
+}
+
