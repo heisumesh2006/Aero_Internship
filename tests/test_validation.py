@@ -99,3 +99,12 @@ def test_symlink_member_rejected(client, tmp_path):
     assert response.json()["error"]["code"] == "UNSAFE_ARCHIVE"
 
 
+def test_multiple_shapefiles_rejected(client, tmp_path):
+    response = upload(client, "demo.zip", make_zip(tmp_path, {
+        "a.shp": b"", "a.shx": b"", "a.dbf": b"",
+        "b.shp": b"", "b.shx": b"", "b.dbf": b"",
+    }))
+    assert response.status_code == 400
+    assert "exactly one" in response.json()["error"]["message"]
+
+
