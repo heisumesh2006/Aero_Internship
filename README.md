@@ -42,3 +42,25 @@ EPSG:4326 coordinates are longitude and latitude in degrees. A degree is an angu
 
 For a Bengaluru feature around 77.6°E, 13°N, this selects UTM zone 43N (`EPSG:32643`). Its source geometry remains in EPSG:4326 while length is reported in meters and area in m². A single UTM zone is pragmatic for local and regional datasets; global, dateline-crossing, polar, or many-zone datasets need a geodesic or tailored projection strategy. Dataset centers outside UTM latitude limits are rejected for non-metric input.
 
+## Setup
+
+Python **3.11+** is required. From the repository root:
+
+**Windows PowerShell**
+
+```powershell
+py -3 -m venv .venv
+.\.venv\Scripts\Activate.ps1
+python -m pip install -e ".[dev]"
+```
+
+**Linux/macOS**
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+python -m pip install -e '.[dev]'
+```
+
+If your `python3` is below 3.11, use an installed `python3.11` or newer to create the environment. No `.env` is needed. See `.env.example` for `APP_NAME`, `DATABASE_URL`, `UPLOAD_DIR`, `MAX_UPLOAD_SIZE_MB`, and `LOG_LEVEL`; these are ordinary environment variables.
+
