@@ -54,3 +54,9 @@ export async function getAllFiles(signal?: AbortSignal): Promise<UploadedFile[]>
   }
 }
 
+export function uploadFile(file: File): Promise<UploadedFile> {
+  const form = new FormData()
+  form.append('file', file)
+  return request('/api/files/', { method: 'POST', body: form })
+}
+
