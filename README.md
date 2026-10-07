@@ -123,3 +123,12 @@ docker compose up --build
 
 The image uses Python 3.12 and runs as a non-root user. A named volume preserves SQLite and uploads at `/data`; the API is on port 8000. The local venv, DB, uploads, caches, and secrets are excluded from the build context.
 
+## Design decisions and alternatives
+
+- **FastAPI + Pydantic** keep request/response contracts clear and document them automatically. Django REST Framework would be viable but adds framework weight for this small API.
+- **SQLite + SQLAlchemy** make local setup simple while demonstrating relational modeling and session boundaries. PostGIS would be appropriate for spatial queries at scale; here GeoJSON JSON storage is sufficient because uploads are measured once and fetched by ID.
+- **GeoPandas, Shapely, PyProj** provide mature file reading, geometry operations, and coordinate transforms. A hand-rolled parser or degree-based arithmetic would be error-prone.
+- **Synchronous processing** keeps assignment behavior deterministic. For large files, a Celery/RQ worker, queued job status, and object storage such as S3 would avoid long HTTP requests.
+- **UTM** is a straightforward local/regional metric projection. Equal-area projections or `pyproj.Geod` are better choices for certain broad-area measurements.
+- **Validated ZIP extraction** protects against traversal, symlink entries, many-entry archives, and excessive expansion before reading shapefile components.
+
