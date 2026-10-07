@@ -108,3 +108,13 @@ def test_multiple_shapefiles_rejected(client, tmp_path):
     assert "exactly one" in response.json()["error"]["message"]
 
 
+def test_failed_processing_is_persisted(client):
+    response = upload(client, "bad.kml", b"not xml")
+    assert response.status_code == 400
+    with client.app.state.session_factory() as session:
+        records = session.query(UploadedFile).all()
+        assert len(records) == 1
+        assert records[0].status == "FAILED"
+        assert records[0].error_message
+
+
