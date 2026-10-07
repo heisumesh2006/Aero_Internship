@@ -8,3 +8,16 @@ export type MeasurementStatus =
   | 'INVALID_GEOMETRY'
   | 'MEASUREMENT_FAILED'
 
+export interface UploadedFile {
+  id: string
+  filename: string
+  file_type: 'KML' | 'SHAPEFILE'
+  feature_count: number
+  source_crs: string | null
+  measurement_crs: string | null
+  status: FileStatus
+  error_message: string | null
+  created_at: string
+  completed_at: string | null
+}
+
