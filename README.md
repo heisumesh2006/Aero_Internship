@@ -144,3 +144,6 @@ One shapefile dataset is accepted per ZIP. Processing is synchronous and SQLite 
 
 PostgreSQL/PostGIS, background workers (Celery/RQ), S3 storage, asynchronous large-file jobs with webhooks/progress, dataset bounding boxes, a map-preview frontend, authentication and rate limiting, structured observability, container deployment automation, and geodesic/equal-area strategies would be sensible next steps.
 
+## Learning and interview notes
+
+This project demonstrates geospatial format handling, CRS recognition and reprojection, REST API design, safe file processing, relational modeling, and focused automated testing. A shapefile is a group of companion files: `.shp` holds geometry, `.shx` indexes it, `.dbf` holds attributes, and `.prj` describes its CRS. KML is an XML-based geographic format. Be ready to explain why EPSG:4326 degrees need projection, how UTM zones are selected, why an unsupported feature does not fail the dataset, and how the system would move to PostGIS, workers, and object storage at scale.
