@@ -34,3 +34,7 @@ async function request<T>(path: string, options?: RequestInit): Promise<T> {
   return response.json() as Promise<T>
 }
 
+export function getHealth(signal?: AbortSignal): Promise<{ status: string }> {
+  return request('/health', { signal })
+}
+
