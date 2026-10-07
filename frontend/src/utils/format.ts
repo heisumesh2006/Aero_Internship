@@ -26,3 +26,11 @@ export function formatFileSize(bytes: number): string {
   return bytes < 1024 * 1024 ? `${(bytes / 1024).toFixed(1)} KB` : `${(bytes / (1024 * 1024)).toFixed(2)} MB`
 }
 
+export function crsDescription(crs: string | null): string {
+  if (!crs) return 'Not available'
+  if (crs === 'EPSG:4326') return 'Geographic coordinates'
+  const match = /^EPSG:(326|327)(\d{2})$/.exec(crs)
+  if (match) return `UTM Zone ${Number(match[2])}${match[1] === '326' ? 'N' : 'S'} · metric projection`
+  return 'Projected coordinate system'
+}
+
