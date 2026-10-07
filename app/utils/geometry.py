@@ -33,3 +33,7 @@ def json_safe(value: Any) -> Any:
     return str(value)
 
 
+def geometry_geojson(geometry: BaseGeometry | None) -> dict[str, Any] | None:
+    if geometry is None or geometry.is_empty:
+        return None
+    return json_safe(mapping(geometry))
