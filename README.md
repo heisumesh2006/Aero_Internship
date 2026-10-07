@@ -64,3 +64,11 @@ python -m pip install -e '.[dev]'
 
 If your `python3` is below 3.11, use an installed `python3.11` or newer to create the environment. No `.env` is needed. See `.env.example` for `APP_NAME`, `DATABASE_URL`, `UPLOAD_DIR`, `MAX_UPLOAD_SIZE_MB`, and `LOG_LEVEL`; these are ordinary environment variables.
 
+## Run application
+
+```bash
+uvicorn app.main:app --reload
+```
+
+Tables and `uploads/` are initialized at startup. Open [Swagger UI](http://127.0.0.1:8000/docs) or [ReDoc](http://127.0.0.1:8000/redoc).
+
