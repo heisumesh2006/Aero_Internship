@@ -56,3 +56,7 @@ export interface FileMeasurementsResponse {
   features: FeatureMeasurement[]
 }
 
+export interface ApiErrorBody {
+  error?: { code: string; message: string }
+  detail?: unknown
+}
