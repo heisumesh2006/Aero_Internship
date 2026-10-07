@@ -87,3 +87,15 @@ def test_archive_member_limit(client, tmp_path):
     assert "too many entries" in response.json()["error"]["message"]
 
 
+def test_symlink_member_rejected(client, tmp_path):
+    path = tmp_path / "symlink.zip"
+    info = ZipInfo("parcel.shp")
+    info.create_system = 3
+    info.external_attr = 0o120777 << 16
+    with ZipFile(path, "w") as archive:
+        archive.writestr(info, "target")
+    response = upload(client, "demo.zip", path.read_bytes())
+    assert response.status_code == 400
+    assert response.json()["error"]["code"] == "UNSAFE_ARCHIVE"
+
+
