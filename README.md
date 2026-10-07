@@ -16,3 +16,13 @@ A FastAPI backend that accepts KML and zipped ESRI Shapefiles, stores their feat
 
 FastAPI provides typed HTTP endpoints and OpenAPI; Pydantic v2 validates responses; Uvicorn serves the app. SQLAlchemy 2.x maps SQLite records. GeoPandas and Pyogrio read geospatial formats; Shapely handles geometries; PyProj supplies CRS definitions and transformations. `python-multipart` handles uploads. Pytest, pytest-cov, and FastAPI TestClient/httpx verify behavior.
 
+## Architecture
+
+```text
+Client -> FastAPI routes -> upload validation -> KML / safe ZIP + shapefile reader
+                                      -> GeoPandas -> CRS service -> measurement service
+                                      -> SQLAlchemy / SQLite -> API response
+```
+
+`app/api` owns HTTP details, `app/schemas` response shapes, `app/models` persistence, `app/db` sessions, `app/services` processing and projection rules, and `app/utils` validation, archive safety, and JSON conversion. `tests` exercises both endpoints and focused spatial/security logic.
+
