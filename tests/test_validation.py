@@ -118,3 +118,14 @@ def test_failed_processing_is_persisted(client):
         assert records[0].error_message
 
 
+def test_shapefile_without_prj_is_rejected(client, shapefile_zip, tmp_path):
+    source = tmp_path / "source.zip"
+    source.write_bytes(shapefile_zip)
+    output = tmp_path / "without-prj.zip"
+    with ZipFile(source) as original, ZipFile(output, "w") as altered:
+        for member in original.infolist():
+            if not member.filename.lower().endswith(".prj"):
+                altered.writestr(member, original.read(member))
+    response = upload(client, "parcel.zip", output.read_bytes())
+    assert response.status_code == 400
+    assert response.json()["error"]["code"] == "MISSING_CRS"
