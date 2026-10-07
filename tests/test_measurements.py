@@ -48,3 +48,9 @@ def test_existing_metric_crs_is_reused():
     assert determine_measurement_crs(frame, CRS.from_epsg(32643)).to_epsg() == 32643
 
 
+def test_non_metric_projected_crs_selects_utm():
+    geographic = gpd.GeoDataFrame(geometry=[Point(-74, 40.7)], crs="EPSG:4326")
+    frame = geographic.to_crs("EPSG:2263")
+    assert determine_measurement_crs(frame, CRS.from_epsg(2263)).to_epsg() == 32618
+
+
