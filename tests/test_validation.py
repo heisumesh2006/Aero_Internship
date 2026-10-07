@@ -39,3 +39,14 @@ def test_size_limit(tmp_path, kml_bytes):
     assert not list((tmp_path / "uploads").iterdir())
 
 
+@pytest.mark.parametrize("content,code", [
+    (b"not a ZIP", "INVALID_SHAPEFILE_ARCHIVE"),
+    (None, "INVALID_SHAPEFILE_ARCHIVE"),
+])
+def test_corrupt_or_missing_shapefile(client, tmp_path, content, code):
+    content = content if content is not None else make_zip(tmp_path, {"notes.txt": b"hello"})
+    response = upload(client, "demo.zip", content)
+    assert response.status_code == 400
+    assert response.json()["error"]["code"] == code
+
+
