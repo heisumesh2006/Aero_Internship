@@ -33,3 +33,10 @@ def determine_utm_crs(longitude: float, latitude: float) -> CRS:
     return CRS.from_epsg((32600 if latitude >= 0 else 32700) + zone)
 
 
+def _uses_meters(crs: CRS) -> bool:
+    return crs.is_projected and bool(crs.axis_info) and all(
+        math.isclose(axis.unit_conversion_factor, 1.0, rel_tol=1e-9)
+        for axis in crs.axis_info[:2]
+    )
+
+
