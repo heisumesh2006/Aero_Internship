@@ -9,3 +9,12 @@ export function geometryFamily(type: string | null): GeometryFamily {
   return 'Other'
 }
 
+export function formatMeasurement(measurement: MeasurementResponse): string {
+  if (measurement.status === 'NOT_REQUIRED') return 'No measurement required'
+  if (measurement.status === 'UNSUPPORTED') return 'Unsupported geometry'
+  if (measurement.status === 'INVALID_GEOMETRY') return 'Invalid geometry'
+  if (measurement.status === 'MEASUREMENT_FAILED') return 'Measurement unavailable'
+  if (measurement.value == null) return '—'
+  return `${new Intl.NumberFormat('en-US', { maximumFractionDigits: 3, minimumFractionDigits: 0 }).format(measurement.value)} ${measurement.unit || ''}`.trim()
+}
+
