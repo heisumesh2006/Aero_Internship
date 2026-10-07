@@ -60,3 +60,7 @@ export function uploadFile(file: File): Promise<UploadedFile> {
   return request('/api/files/', { method: 'POST', body: form })
 }
 
+export function getFile(id: string, signal?: AbortSignal): Promise<UploadedFile> {
+  return request(`/api/files/${encodeURIComponent(id)}/`, { signal })
+}
+
