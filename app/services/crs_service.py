@@ -40,3 +40,20 @@ def _uses_meters(crs: CRS) -> bool:
     )
 
 
+def determine_measurement_crs(frame: gpd.GeoDataFrame, source_crs: CRS) -> CRS | None:
+    if _uses_meters(source_crs):
+        return source_crs
+    nonempty = frame.geometry[frame.geometry.notna() & ~frame.geometry.is_empty]
+    if nonempty.empty:
+        return None
+    try:
+        bounds = gpd.GeoSeries(nonempty, crs=source_crs).to_crs("EPSG:4326").total_bounds
+        longitude = (bounds[0] + bounds[2]) / 2
+        latitude = (bounds[1] + bounds[3]) / 2
+        return determine_utm_crs(longitude, latitude)
+    except AppError:
+        raise
+    except Exception as exc:
+        raise AppError("CRS_TRANSFORM_FAILED", "Could not determine a metric CRS for this dataset.") from exc
+
+
