@@ -43,3 +43,8 @@ def test_unmeasured_and_invalid_geometries():
     assert measure_geometry(Polygon(), crs, crs).status == MeasurementStatus.INVALID_GEOMETRY
 
 
+def test_existing_metric_crs_is_reused():
+    frame = gpd.GeoDataFrame(geometry=[Point(500000, 1400000)], crs="EPSG:32643")
+    assert determine_measurement_crs(frame, CRS.from_epsg(32643)).to_epsg() == 32643
+
+
