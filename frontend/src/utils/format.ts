@@ -18,3 +18,7 @@ export function formatMeasurement(measurement: MeasurementResponse): string {
   return `${new Intl.NumberFormat('en-US', { maximumFractionDigits: 3, minimumFractionDigits: 0 }).format(measurement.value)} ${measurement.unit || ''}`.trim()
 }
 
+export function formatDate(value: string): string {
+  return new Intl.DateTimeFormat('en-US', { day: '2-digit', month: 'short', year: 'numeric' }).format(new Date(value))
+}
+
