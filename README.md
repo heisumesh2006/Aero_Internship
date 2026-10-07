@@ -140,3 +140,7 @@ Only `.kml` and `.zip` extensions are accepted; upload bytes are capped. Client 
 
 One shapefile dataset is accepted per ZIP. Processing is synchronous and SQLite targets local or small deployments. A single dataset-center UTM zone can distort very large or cross-zone datasets; dateline and polar datasets need a different strategy. Uploaded originals remain on local disk for audit/reprocessing and there is no retention policy, authentication, or cloud object storage.
 
+## Future scope
+
+PostgreSQL/PostGIS, background workers (Celery/RQ), S3 storage, asynchronous large-file jobs with webhooks/progress, dataset bounding boxes, a map-preview frontend, authentication and rate limiting, structured observability, container deployment automation, and geodesic/equal-area strategies would be sensible next steps.
+
