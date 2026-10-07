@@ -33,3 +33,14 @@ def test_kml_upload_and_measurements(client, kml_bytes):
     assert by_type["Polygon"]["geometry"]["type"] == "Polygon"
 
 
+def test_shapefile_zip_upload(client, shapefile_zip):
+    response = upload(client, "parcel.zip", shapefile_zip)
+    assert response.status_code == 201, response.text
+    data = response.json()
+    assert data["file_type"] == "SHAPEFILE"
+    assert data["feature_count"] == 1
+    item = client.get(f"/api/files/{data['id']}/measurements/").json()["features"][0]
+    assert item["properties"]["name"] == "parcel"
+    assert item["measurement"]["status"] == "SUPPORTED"
+
+
