@@ -57,3 +57,9 @@ def determine_measurement_crs(frame: gpd.GeoDataFrame, source_crs: CRS) -> CRS |
         raise AppError("CRS_TRANSFORM_FAILED", "Could not determine a metric CRS for this dataset.") from exc
 
 
+def transform_geometry(geometry: BaseGeometry, source: CRS, target: CRS) -> BaseGeometry:
+    try:
+        transformer = Transformer.from_crs(source, target, always_xy=True)
+        return transform(geometry, transformer.transform, interleaved=False)
+    except Exception as exc:
+        raise AppError("CRS_TRANSFORM_FAILED", "Could not transform feature geometry.") from exc
