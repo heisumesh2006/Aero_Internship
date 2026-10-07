@@ -74,3 +74,10 @@ def test_backslash_archive_path_rejected(tmp_path):
         _safe_destination(tmp_path, member)
 
 
+@pytest.mark.parametrize("name", ["CON.shp", "folder/NUL.txt", "aux .dbf"])
+def test_windows_device_names_rejected(client, tmp_path, name):
+    response = upload(client, "demo.zip", make_zip(tmp_path, {name: b"content"}))
+    assert response.status_code == 400
+    assert response.json()["error"]["code"] == "UNSAFE_ARCHIVE"
+
+
