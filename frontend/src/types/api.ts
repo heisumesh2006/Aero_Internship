@@ -21,3 +21,10 @@ export interface UploadedFile {
   completed_at: string | null
 }
 
+export interface FileListResponse {
+  total: number
+  limit: number
+  offset: number
+  items: UploadedFile[]
+}
+
