@@ -26,3 +26,13 @@ Client -> FastAPI routes -> upload validation -> KML / safe ZIP + shapefile read
 
 `app/api` owns HTTP details, `app/schemas` response shapes, `app/models` persistence, `app/db` sessions, `app/services` processing and projection rules, and `app/utils` validation, archive safety, and JSON conversion. `tests` exercises both endpoints and focused spatial/security logic.
 
+## File processing flow
+
+1. Receive a multipart `file` upload and check its extension and 25 MB default limit.
+2. Store it under a generated UUID filename; retain the client filename only as metadata.
+3. Create a `PROCESSING` database record. For ZIP, inspect every member, reject unsafe entries, and extract to a disposable temporary directory.
+4. Read the KML or one complete shapefile (`.shp`, `.shx`, `.dbf`) into a GeoDataFrame.
+5. Read the source CRS. KML defaults to its standard WGS84 CRS if a driver omits CRS. A shapefile without a usable `.prj` is rejected rather than guessed.
+6. Choose a metric measurement CRS, then measure each supported feature after transformation. The stored GeoJSON stays in source coordinates.
+7. Store feature metadata and mark the file `COMPLETED`. A file-level error marks it `FAILED` with a safe message. Temporary extraction files are removed.
+
