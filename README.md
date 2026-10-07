@@ -72,3 +72,37 @@ uvicorn app.main:app --reload
 
 Tables and `uploads/` are initialized at startup. Open [Swagger UI](http://127.0.0.1:8000/docs) or [ReDoc](http://127.0.0.1:8000/redoc).
 
+## API endpoints
+
+| Method | Path | Purpose |
+|---|---|---|
+| GET | `/health` | Availability check |
+| POST | `/api/files/` | Multipart `file` upload; processes synchronously |
+| GET | `/api/files/?limit=20&offset=0` | Paginated upload metadata; limit 1–100 |
+| GET | `/api/files/{id}/` | File metadata and status |
+| GET | `/api/files/{id}/measurements/` | Ordered features, GeoJSON, attributes, and measurements |
+
+Generate demonstration uploads with `python scripts/generate_sample_data.py`, then:
+
+```bash
+curl -F "file=@sample_data/bengaluru_demo.kml" http://127.0.0.1:8000/api/files/
+curl http://127.0.0.1:8000/api/files/REPLACE_UUID/measurements/
+```
+
+PowerShell:
+
+```powershell
+curl.exe -F "file=@sample_data/bengaluru_demo.kml" http://127.0.0.1:8000/api/files/
+Invoke-RestMethod http://127.0.0.1:8000/api/files/REPLACE_UUID/measurements/
+```
+
+### Example responses
+
+An upload returns HTTP 201:
+
+```json
+{"id":"7bf31d2a-4641-4da7-94df-3c886f0fcd19","filename":"bengaluru_demo.kml","file_type":"KML","feature_count":3,"source_crs":"EPSG:4326","measurement_crs":"EPSG:32643","status":"COMPLETED","error_message":null,"created_at":"2026-10-07T10:00:00Z","completed_at":"2026-10-07T10:00:01Z"}
+```
+
+`GET /api/files/{id}/measurements/` returns `file_id`, `filename`, both CRSs, `feature_count`, and a `features` array. Each feature contains `feature_index`, `external_feature_id`, `geometry_type`, source-coordinate GeoJSON `geometry`, `properties`, both CRSs, and a measurement object such as `{"type":"area","value":12034.567,"unit":"m²","status":"SUPPORTED","message":null}`. Point features return `NOT_REQUIRED`; null/empty/invalid geometries return `INVALID_GEOMETRY`; GeometryCollection returns `UNSUPPORTED`. Errors use `{"error":{"code":"...","message":"..."}}` with 400, 404, 413, or 415 as appropriate.
+
