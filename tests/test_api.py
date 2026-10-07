@@ -50,3 +50,13 @@ def test_missing_file(client):
     assert response.json()["error"]["code"] == "FILE_NOT_FOUND"
 
 
+def test_paginated_file_list(client, kml_bytes):
+    ids = [upload(client, f"demo-{index}.kml", kml_bytes).json()["id"] for index in range(2)]
+    page = client.get("/api/files/?limit=1&offset=1").json()
+    assert page["total"] == 2
+    assert page["limit"] == 1
+    assert page["offset"] == 1
+    assert page["items"][0]["id"] == ids[0]
+    assert client.get("/api/files/?limit=101").status_code == 422
+
+
