@@ -36,3 +36,14 @@ export interface MeasurementResponse {
   message: string | null
 }
 
+export interface FeatureMeasurement {
+  feature_index: number
+  external_feature_id: string | null
+  geometry_type: string | null
+  geometry: Geometry | null
+  properties: Record<string, unknown>
+  source_crs: string
+  measurement_crs: string | null
+  measurement: MeasurementResponse
+}
+
