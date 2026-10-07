@@ -47,3 +47,12 @@ export interface FeatureMeasurement {
   measurement: MeasurementResponse
 }
 
+export interface FileMeasurementsResponse {
+  file_id: string
+  filename: string
+  source_crs: string | null
+  measurement_crs: string | null
+  feature_count: number
+  features: FeatureMeasurement[]
+}
+
